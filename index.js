@@ -11,6 +11,7 @@ import {
 } from './validations/auth.js'
 
 import UserModel from './models/User.js'
+import checkAuth from './utils/checkAuth.js'
 
 mongoose.connect('mongodb+srv://admin:5102004@cluster0.jshki4o.mongodb.net/blog?retryWrites=true&w=majority')
   .then(() => console.log("DB ok"))
@@ -109,6 +110,30 @@ app.post('/auth/register', registerValidation, async (req, res) => {
     });
   }
 });
+
+app.get('/auth/me', checkAuth,  async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: 'Пользователь не найден'
+      });
+    }
+
+    const {
+      passwordHach,
+      ...userData
+    } = user._doc
+
+    res.json(userData);
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      message: 'Нет доступа'
+    })
+  }
+})
 
 app.listen(4444, (err) => {
   if (err) {
