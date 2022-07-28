@@ -1,5 +1,5 @@
 import express from 'express';
-import fs from 'fs'
+import fs from 'fs';
 import multer from 'multer';
 import mongoose from 'mongoose';
 import { registerValidation, loginValidation, postCreateValidation } from './validations.js';
@@ -9,7 +9,7 @@ import {checkAuth, handleValidationErrors} from './utils/index.js'
 import { UserController, PostController } from './controllers/index.js'
 
 
-mongoose.connect(process.env.MONGODB_URL)
+mongoose.connect(process.env.MONGODB_URL || "mongodb+srv://admin:5102004@cluster0.jshki4o.mongodb.net/blog?retryWrites=true&w=majority")
   .then(() => console.log("DB ok"))
   .catch((err) => console.log("DB error", err));
 
